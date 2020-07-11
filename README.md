@@ -1,2 +1,2 @@
-# python-test
- test repository for python
+# neural network for python
+ implementation of neural network using numpy
