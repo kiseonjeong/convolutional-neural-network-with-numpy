@@ -1,9 +1,10 @@
-from activation_function import *
+from activation_function import actfunc
 from dataset.mnist import *
 
 class threeLayersNet:
     def __init__(self):
         self.network = {}
+        self.func = actfunc()
 
     # Get the dataset
     def get_data(self):
@@ -21,11 +22,11 @@ class threeLayersNet:
         b1, b2, b3 = self.network['b1'], self.network['b2'], self.network['b3']
 
         a1 = np.dot(x, W1) + b1
-        z1 = sigmoid(a1)
+        z1 = self.func.sigmoid(a1)
         a2 = np.dot(z1, W2) + b2
-        z2 = sigmoid(a2)
+        z2 = self.func.sigmoid(a2)
         a3 = np.dot(z2, W3) + b3
-        y = identity_function(a3)
+        y = self.func.identity_function(a3)
 
         return y
 
@@ -35,10 +36,10 @@ class threeLayersNet:
         b1, b2, b3 = self.network['b1'], self.network['b2'], self.network['b3']
 
         a1 = np.dot(x, W1) + b1
-        z1 = sigmoid(a1)
+        z1 = self.func.sigmoid(a1)
         a2 = np.dot(z1, W2) + b2
-        z2 = sigmoid(a2)
+        z2 = self.func.sigmoid(a2)
         a3 = np.dot(z2, W3) + b3
-        y = softmax(a3)
+        y = self.func.softmax(a3)
 
         return y

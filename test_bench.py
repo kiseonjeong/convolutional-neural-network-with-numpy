@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pylab as plt
-from three_layers_network import *
+from three_layers_network import threeLayersNet
 
 # Create a neural network
 thNet = threeLayersNet()
