@@ -1,2 +1,2 @@
-# neural network for python
- implementation of neural network using numpy
+# neural network with numpy
+ implementation of neural network with numpy
