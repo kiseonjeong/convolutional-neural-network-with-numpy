@@ -1,7 +1,7 @@
 import numpy as np
 
-# The gradient calculator for neural network
-class gradCalc:
+# The gradient computations for neural network
+class grad:
     # Object initializer
     def __init__(self):
         pass
