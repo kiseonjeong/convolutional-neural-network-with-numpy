@@ -1,6 +1,11 @@
 import numpy as np
 
-class actfunc:
+# The activation functions for neural network
+class actFunc:
+    # Object initializer
+    def __init__(self):
+        pass
+
     # Step function
     def step_function(self, x):
         return np.array(x > 0, dtype=np.int)

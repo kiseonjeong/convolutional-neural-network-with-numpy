@@ -1,10 +1,12 @@
-from activation_function import actfunc
+from activation_function import actFunc
 from dataset.mnist import *
 
-class threeLayersNet:
+# The test neural network with three layers
+class testNeuralNet:
+    # Object initializer
     def __init__(self):
         self.network = {}
-        self.func = actfunc()
+        self.func = actFunc()
 
     # Get the dataset
     def get_data(self):
@@ -43,3 +45,5 @@ class threeLayersNet:
         y = self.func.softmax(a3)
 
         return y
+
+    

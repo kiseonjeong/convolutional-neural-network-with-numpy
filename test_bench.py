@@ -1,18 +1,17 @@
 import numpy as np
 import matplotlib.pylab as plt
-from three_layers_network import threeLayersNet
+from numpy.testing._private.utils import nulp_diff
+from test_neural_network import testNeuralNet
+from activation_function import actFunc
+from cost_function import costFunc
+from gradient import gradCalc
 
-# Create a neural network
-thNet = threeLayersNet()
-x, t = thNet.get_data()
-thNet.init_network()
+def function_1(x):
+    return 0.01 * x**2 + 0.1 * x
 
-# Predict responses
-accuracy_cnt = 0
-for i in range(len(x)):
-    y = thNet.predict(x[i])
-    p = np.argmax(y)
-    if p == t[i]:
-        accuracy_cnt += 1
+def function_2(x):
+    return x[0]**2 + x[1]**2
 
-print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
+gc = gradCalc()
+init_x = np.array([-3.0, 4.0])
+print(gc.gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100))

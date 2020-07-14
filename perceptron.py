@@ -1,5 +1,6 @@
 import numpy as np
 
+# Test for perceptrons
 class gate:
     def __init__(self):
         self.w = np.array([0.0, 0.0])
