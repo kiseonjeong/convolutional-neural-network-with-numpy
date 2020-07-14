@@ -16,7 +16,7 @@ class grad:
         h = 1e-4
         grad = np.zeros_like(x)
 
-        for idx in range(x.size):
+        for idx in range(x.shape[0]):
             tmp_val = x[idx]
             # f(x+h)
             x[idx] = tmp_val + h
