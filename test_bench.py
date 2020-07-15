@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pylab as plt
 from dataset.mnist import load_mnist
 from two_layer_network import twoLayerNeuralNet
-
+from layer import *
+'''
 # Load the MNIST dataset
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
@@ -27,7 +28,7 @@ for i in range(iters_num):
     t_batch = t_train[batch_mask]
 
     # Calculate gradients
-    grad = network.numerical_gradient(x_batch, t_batch)
+    grad = network.backprop_gradient(x_batch, t_batch)
 
     # Update the parameters
     for key in ('W1', 'b1', 'W2', 'b2'):
@@ -51,3 +52,17 @@ for i in range(iters_num):
 # Show the results
 plt.plot(train_loss_list)
 plt.show()
+'''
+(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
+
+network = twoLayerNeuralNet(num_input_node=784, num_hidden_node=50, num_output_node=10)
+
+x_batch = x_train[:3]
+t_batch = t_train[:3]
+
+grad_numerical = network.numerical_gradient(x_batch, t_batch)
+grad_backprop = network.backprop_gradient(x_batch, t_batch)
+
+for key in grad_numerical.keys():
+    diff = np.average(np.abs(grad_backprop[key] - grad_numerical[key]))
+    print(key + ":" + str(diff))

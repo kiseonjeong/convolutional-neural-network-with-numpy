@@ -12,23 +12,33 @@ class grad:
         return (f(x + h) - f(x - h)) / (2 * h)
 
     # Calculate a numerical gradient
-    def numerical_gradient(self, f, x):
+    def _numerical_gradient(self, f, x):
         h = 1e-4
         grad = np.zeros_like(x)
 
-        for idx in range(x.shape[0]):
+        for idx in range(x.size):
             tmp_val = x[idx]
             # f(x+h)
-            x[idx] = tmp_val + h
+            x[idx] = float(tmp_val) + h
             fxh1 = f(x)
 
             # f(x-h)
-            x[idx] = tmp_val - h
+            x[idx] = float(tmp_val) - h
             fxh2 = f(x)
 
             grad[idx] = (fxh1 - fxh2) / (2 * h)
             x[idx] = tmp_val
 
+        return grad
+
+    def numerical_gradient(self, f, x):
+        if x.ndim == 1:
+            return self._numerical_gradient(f, x)
+        else:
+            grad = np.zeros_like(x)        
+            for idx, _x in enumerate(x):
+                grad[idx] = self._numerical_gradient(f, _x)
+        
         return grad
 
     # Optimize a function using the gradient descent
