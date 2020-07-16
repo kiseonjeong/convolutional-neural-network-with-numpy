@@ -8,7 +8,7 @@ class SGD:
 
     # Update network parameters by SGD
     def update(self, params, grads):
-        for key in params.key():
+        for key, val in params.items():
             params[key] -= self.lr * grads[key]
 
 # The Momentum optimizer

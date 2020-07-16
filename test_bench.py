@@ -9,19 +9,19 @@ from optimizer import *
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
 # The hyperparameters
-iters_num = 100
+iters_num = 10
 train_size = x_train.shape[0]
 batch_size = 100
 learning_rate = 0.001
 network = TwoLayerNeuralNet(num_input_node=784, num_hidden_node=50, num_output_node=10)
-optimizer = Adam()
+optimizer = Adam(lr=learning_rate)
 
 # Do training on the network
 train_loss_list = []
 test_loss_list = []
 train_acc_list = []
 test_acc_list = []
-iter_per_epoch = 10
+iter_per_epoch = 1
 #iter_per_epoch = max(train_size / batch_size, 1)
 for i in range(iters_num):
     # Get the mini-batch dataset
@@ -30,8 +30,8 @@ for i in range(iters_num):
     t_batch = t_train[batch_mask]
 
     # Calculate gradients
-    grads = network.numerical_gradient(x_batch, t_batch)
-    #grads = network.backprop_gradient(x_batch, t_batch)
+    #grads = network.numerical_gradient(x_batch, t_batch)
+    grads = network.backprop_gradient(x_batch, t_batch)
 
     # Update the parameters
     optimizer.update(network.params, grads)
