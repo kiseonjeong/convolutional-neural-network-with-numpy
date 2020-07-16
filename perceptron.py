@@ -1,7 +1,7 @@
 import numpy as np
 
 # Test for perceptrons
-class gate:
+class Gate:
     def __init__(self):
         self.w = np.array([0.0, 0.0])
         self.b = 0.0

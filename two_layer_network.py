@@ -6,7 +6,7 @@ from gradient import grad
 from layer import *
 
 # The neural network with two layers
-class twoLayerNeuralNet:
+class TwoLayerNeuralNet:
     # Object initializer
     def __init__(self, num_input_node, num_hidden_node, num_output_node, weight_init_std=0.01):
         # Initialize parameters

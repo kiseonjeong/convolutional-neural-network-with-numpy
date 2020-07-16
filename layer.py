@@ -3,7 +3,7 @@ from activation_function import actFunc
 from cost_function import costFunc
 
 # The multiply layer
-class mulLayer:
+class MulLayer:
     # Object initializer
     def __init__(self):
         self.x = None
@@ -25,7 +25,7 @@ class mulLayer:
         return dx, dy
 
 # The addition layer
-class addLayer:
+class AddLayer:
     # Object initializer
     def __init__(self):
         pass

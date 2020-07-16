@@ -11,8 +11,8 @@ class grad:
         h = 1e-4
         return (f(x + h) - f(x - h)) / (2 * h)
 
-    # Calculate a numerical gradient
-    def _numerical_gradient(self, f, x):
+    # Calculate numerical gradients without batch
+    def __numerical_gradient_without_batch(self, f, x):
         h = 1e-4
         grad = np.zeros_like(x)
 
@@ -31,13 +31,14 @@ class grad:
 
         return grad
 
+    # Calculate numerical gradients with batch
     def numerical_gradient(self, f, x):
         if x.ndim == 1:
-            return self._numerical_gradient(f, x)
+            return self.__numerical_gradient_without_batch(f, x)
         else:
             grad = np.zeros_like(x)        
             for idx, _x in enumerate(x):
-                grad[idx] = self._numerical_gradient(f, _x)
+                grad[idx] = self.__numerical_gradient_without_batch(f, _x)
         
         return grad
 
