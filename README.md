@@ -1,2 +1,2 @@
-# deep neural network with numpy
- implementation of deep neural network with numpy
+# convolutional neural network with numpy
+ implementation of convolutional neural network with numpy
