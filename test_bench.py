@@ -9,7 +9,7 @@ from optimizer import *
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
 # The hyperparameters
-iters_num = 10
+iters_num = 1000
 train_size = x_train.shape[0]
 batch_size = 100
 learning_rate = 0.001
@@ -21,7 +21,7 @@ train_loss_list = []
 test_loss_list = []
 train_acc_list = []
 test_acc_list = []
-iter_per_epoch = 1
+iter_per_epoch = 10
 #iter_per_epoch = max(train_size / batch_size, 1)
 for i in range(iters_num):
     # Get the mini-batch dataset
@@ -30,7 +30,6 @@ for i in range(iters_num):
     t_batch = t_train[batch_mask]
 
     # Calculate gradients
-    #grads = network.numerical_gradient(x_batch, t_batch)
     grads = network.backprop_gradient(x_batch, t_batch)
 
     # Update the parameters
@@ -49,7 +48,7 @@ for i in range(iters_num):
         test_loss_list.append(test_loss)
         train_acc_list.append(train_acc)
         test_acc_list.append(test_acc)
-        print("train loss, test loss, train acc, test acc | " + str(train_loss) + ", " + str(test_loss) + ", " + str(train_acc) + ", " + str(test_acc))
+        print("{}/{}, train loss, test loss, train acc, test acc | ".format(i, iters_num) + str(train_loss) + ", " + str(test_loss) + ", " + str(train_acc) + ", " + str(test_acc))
 
 # Show the results
 plt.plot(train_loss_list)
