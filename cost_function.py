@@ -1,7 +1,7 @@
 import numpy as np
 
 # The cost functions for neural network
-class costFunc:
+class CostFunc:
     # Object initializer
     def __init__(self):
         self.delta = 1e-7

@@ -1,7 +1,7 @@
 import numpy as np
 
 # The activation functions for neural network
-class actFunc:
+class ActFunc:
     # Object initializer
     def __init__(self):
         pass

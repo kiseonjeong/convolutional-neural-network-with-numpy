@@ -1,6 +1,6 @@
 import numpy as np
-from activation_function import actFunc
-from cost_function import costFunc
+from activation_function import ActFunc
+from cost_function import CostFunc
 
 # The multiply layer
 class MulLayer:
@@ -115,8 +115,8 @@ class SoftmaxWithLoss:
         self.loss = None
         self.y = None
         self.t = None
-        self.af = actFunc()
-        self.cf = costFunc()
+        self.af = ActFunc()
+        self.cf = CostFunc()
 
     # Do forward computations
     def forward(self, x, t):

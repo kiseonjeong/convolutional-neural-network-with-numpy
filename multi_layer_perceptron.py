@@ -5,31 +5,37 @@ from cost_function import CostFunc
 from numerical_gradient import NumGrad
 from network_layer import *
 
-# The neural network with two layers
-class TwoLayerNet:
+# The neural network with multi-layers
+class MultiLayerPerceptron:
     # Object initializer
-    def __init__(self, num_input_node, num_hidden_node, num_output_node, weight_init_std=0.01):
+    def __init__(self, num_input_node, num_hidden_node_list, num_output_node, activation='relu', weight_init_std='relu', weight_decay_lambda=0):
         # Initialize parameters
         self.af = ActFunc()         # activation function
         self.cf = CostFunc()            # cost function
         self.gr = NumGrad()            # gradient calculator
         self.num_input_node = num_input_node            # input node information
-        self.num_hidden_node = num_hidden_node          # hidden node information
+        self.num_hidden_node_list = num_hidden_node_list          # hidden node information
+        self.num_hidden_layer = len(num_hidden_node_list)           # number of hidden layers
         self.num_output_node = num_output_node          # output node information
+        self.weight_decay_lambda = weight_decay_lambda          # weight decay lambda parameter
 
         # Initialize network parameters
         self.params = {}            # network parameters
-        self.params['W1'] = weight_init_std * np.random.randn(num_input_node, num_hidden_node)
-        self.params['b1'] = np.zeros(num_hidden_node)
-        self.params['W2'] = weight_init_std * np.random.randn(num_hidden_node, num_output_node)
-        self.params['b2'] = np.zeros(num_output_node)
+        self.__init_weight(weight_init_std)
 
         # Create network architecture
+        net_layer_var = {'sigmoid': Sigmoid, 'relu': Relu}
         self.layers = OrderedDict()
-        self.layers['Affine1'] = Affine(self.params['W1'], self.params['b1'])
-        self.layers['Relu1'] = Relu()
-        self.layers['Affine2'] = Affine(self.params['W2'], self.params['b2'])
+        self.__create_network(net_layer_var)
         self.lastLayer = SoftmaxWithLoss()
+
+    # Initialize weights
+    def __init_weight(self, weight_init_std):
+        pass
+
+    # Create a network
+    def __create_network(self, net_layer_var):
+        pass
 
     # Predict a response
     def predict(self, x):
@@ -58,10 +64,7 @@ class TwoLayerNet:
 
         # Calculate gradients
         grads = {}
-        grads['W1'] = self.gr.numerical_gradient(loss_W, self.params['W1'])
-        grads['b1'] = self.gr.numerical_gradient(loss_W, self.params['b1'])
-        grads['W2'] = self.gr.numerical_gradient(loss_W, self.params['W2'])
-        grads['b2'] = self.gr.numerical_gradient(loss_W, self.params['b2'])
+        
 
         return grads
 
@@ -80,9 +83,6 @@ class TwoLayerNet:
 
         # Save the gradients
         grads = {}
-        grads['W1'] = self.layers['Affine1'].dW
-        grads['b1'] = self.layers['Affine1'].db
-        grads['W2'] = self.layers['Affine2'].dW
-        grads['b2'] = self.layers['Affine2'].db
+        
 
         return grads

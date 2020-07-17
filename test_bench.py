@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pylab as plt
 from dataset.mnist import load_mnist
-from two_layer_network import TwoLayerNeuralNet
-from layer import *
-from optimizer import *
+from two_layer_network import TwoLayerNet
+from network_layer import *
+from network_optimizer import *
 
 # Load the MNIST dataset
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
@@ -13,7 +13,7 @@ iters_num = 1000
 train_size = x_train.shape[0]
 batch_size = 100
 learning_rate = 0.001
-network = TwoLayerNeuralNet(num_input_node=784, num_hidden_node=50, num_output_node=10)
+network = TwoLayerNet(num_input_node=784, num_hidden_node=50, num_output_node=10)
 optimizer = Adam(lr=learning_rate)
 
 # Do training on the network
@@ -30,6 +30,7 @@ for i in range(iters_num):
     t_batch = t_train[batch_mask]
 
     # Calculate gradients
+    #grads = network.numerical_gradient(x_batch, t_batch)
     grads = network.backprop_gradient(x_batch, t_batch)
 
     # Update the parameters

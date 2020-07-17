@@ -1,4 +1,4 @@
-from activation_function import actFunc
+from activation_function import ActFunc
 from dataset.mnist import *
 
 # The test neural network with three layers
@@ -6,7 +6,7 @@ class TestNeuralNet:
     # Object initializer
     def __init__(self):
         self.network = {}
-        self.func = actFunc()
+        self.func = ActFunc()
 
     # Get the dataset
     def get_data(self):

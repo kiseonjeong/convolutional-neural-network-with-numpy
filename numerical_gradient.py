@@ -1,7 +1,7 @@
 import numpy as np
 
-# The gradient computations for neural network
-class grad:
+# The numerical gradient computations for neural network
+class NumGrad:
     # Object initializer
     def __init__(self):
         pass
