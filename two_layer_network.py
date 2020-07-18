@@ -35,11 +35,13 @@ class TwoLayerNet:
     def predict(self, x):
         for layer in self.layers.values():
             x = layer.forward(x)
+
         return x
 
     # Calculate a loss value
     def loss(self, x, t):
         y = self.predict(x)
+
         return self.lastLayer.forward(y, t)
 
     # Calculate an accuracy
@@ -49,6 +51,7 @@ class TwoLayerNet:
         if t.ndim != 1:
             t = np.argmax(t, axis=1)
         accuracy = np.sum(y == t) / float(x.shape[0])
+        
         return accuracy
 
     # Calculate numerical gradients

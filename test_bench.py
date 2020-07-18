@@ -13,7 +13,7 @@ iters_num = 1000
 train_size = x_train.shape[0]
 batch_size = 100
 learning_rate = 0.001
-network = MultiLayerNet(num_input_node=784, num_hidden_node_list=[100, 50], num_output_node=10, activation='relu', weight_decay_lambda=0)
+network = MultiLayerNet(num_input_node=784, num_hidden_node_list=[100, 50], num_output_node=10, activation='relu', weight_decay_lambda=0.001)
 optimizer = Adam(lr=learning_rate)
 
 # Do training on the network

@@ -53,12 +53,18 @@ class MultiLayerNet:
     def predict(self, x):
         for layer in self.layers.values():
             x = layer.forward(x)
+
         return x
 
     # Calculate a loss value
     def loss(self, x, t):
         y = self.predict(x)
-        return self.lastLayer.forward(y, t)
+        panelty = 0
+        for idx in range(1, self.num_hidden_layer + 2):
+            W = self.params['W' + str(idx)]
+            panelty += 0.5 * self.weight_decay_lambda * np.sum(W**2)
+
+        return self.lastLayer.forward(y, t) + panelty
 
     # Calculate an accuracy
     def accuracy(self, x, t):
@@ -67,6 +73,7 @@ class MultiLayerNet:
         if t.ndim != 1:
             t = np.argmax(t, axis=1)
         accuracy = np.sum(y == t) / float(x.shape[0])
+        
         return accuracy
 
     # Calculate numerical gradients
@@ -98,7 +105,7 @@ class MultiLayerNet:
         # Save the gradients
         grads = {}
         for idx in range(1, self.num_hidden_layer + 2):
-            grads['W' + str(idx)] = self.layers['Affine' + str(idx)].dW
+            grads['W' + str(idx)] = self.layers['Affine' + str(idx)].dW + self.weight_decay_lambda * self.layers['Affine' + str(idx)].W
             grads['b' + str(idx)] = self.layers['Affine' + str(idx)].db
 
         return grads
