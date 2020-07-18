@@ -6,7 +6,7 @@ from numerical_gradient import NumGrad
 from network_layer import *
 
 # The neural network with multi-layers
-class MultiLayerPerceptron:
+class MultiLayerNet:
     # Object initializer
     def __init__(self, num_input_node, num_hidden_node_list, num_output_node, activation='relu', weight_init_std='relu', weight_decay_lambda=0):
         # Initialize parameters

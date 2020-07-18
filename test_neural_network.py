@@ -2,7 +2,7 @@ from activation_function import ActFunc
 from dataset.mnist import *
 
 # The test neural network with three layers
-class TestNeuralNet:
+class TestNet:
     # Object initializer
     def __init__(self):
         self.network = {}
