@@ -10,15 +10,15 @@ class TwoLayerNet:
     # Object initializer
     def __init__(self, num_input_node, num_hidden_node, num_output_node, weight_init_std=0.01):
         # Initialize parameters
-        self.af = ActFunc()         # activation function
-        self.cf = CostFunc()            # cost function
-        self.gr = NumGrad()            # gradient calculator
-        self.num_input_node = num_input_node            # input node information
-        self.num_hidden_node = num_hidden_node          # hidden node information
-        self.num_output_node = num_output_node          # output node information
+        self.af = ActFunc()    # activation function
+        self.cf = CostFunc()    # cost function
+        self.gr = NumGrad()    # gradient calculator
+        self.num_input_node = num_input_node    # input node information
+        self.num_hidden_node = num_hidden_node    # hidden node information
+        self.num_output_node = num_output_node    # output node information
 
         # Initialize network parameters
-        self.params = {}            # network parameters
+        self.params = {}    # network parameters
         self.params['W1'] = weight_init_std * np.random.randn(num_input_node, num_hidden_node)
         self.params['b1'] = np.zeros(num_hidden_node)
         self.params['W2'] = weight_init_std * np.random.randn(num_hidden_node, num_output_node)

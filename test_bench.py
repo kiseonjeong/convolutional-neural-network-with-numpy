@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pylab as plt
 from dataset.mnist import load_mnist
-from two_layer_network import TwoLayerNet
+from multi_layer_network import MultiLayerNet
 from network_layer import *
 from network_optimizer import *
 
@@ -13,7 +13,7 @@ iters_num = 1000
 train_size = x_train.shape[0]
 batch_size = 100
 learning_rate = 0.001
-network = TwoLayerNet(num_input_node=784, num_hidden_node=50, num_output_node=10)
+network = MultiLayerNet(num_input_node=784, num_hidden_node_list=[100, 50], num_output_node=10, activation='relu', weight_decay_lambda=0)
 optimizer = Adam(lr=learning_rate)
 
 # Do training on the network

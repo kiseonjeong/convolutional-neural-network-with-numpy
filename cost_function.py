@@ -4,7 +4,7 @@ import numpy as np
 class CostFunc:
     # Object initializer
     def __init__(self):
-        self.delta = 1e-7
+        pass
 
     # Mean squared error
     def mean_squared_error(self, y, t):
@@ -18,6 +18,6 @@ class CostFunc:
         
         batch_size = y.shape[0]
         if one_hot_enc == True:
-            return -np.sum(t * np.log(y + self.delta)) / batch_size
+            return -np.sum(t * np.log(y + 1e-7)) / batch_size
         else:
             return -np.sum(np.log(y[np.arange(batch_size), t])) / batch_size
