@@ -8,7 +8,9 @@ from network_layer import *
 # The neural network with multi-layers
 class MultiLayerNet:
     # Object initializer
-    def __init__(self, num_input_node, num_hidden_node_list, num_output_node, activation='relu', weight_init_std='relu', weight_decay_lambda=0):
+    def __init__(self, num_input_node, num_hidden_node_list, num_output_node, 
+                activation='relu', weight_init_std='relu', weight_decay_lambda=0,
+                use_dropout=False, dropout_ratio=0.5, use_batchnorm=False):
         # Initialize parameters
         self.af = ActFunc()    # activation function
         self.cf = CostFunc()    # cost function
@@ -18,6 +20,9 @@ class MultiLayerNet:
         self.num_hidden_layer = len(num_hidden_node_list)    # number of hidden layers
         self.num_output_node = num_output_node    # output node information
         self.weight_decay_lambda = weight_decay_lambda    # weight decay lambda parameter
+        self.use_dropout = use_dropout    # use flag for dropout
+        self.dropout_ratio = dropout_ratio    # dropout probability
+        self.use_batchnorm = use_batchnorm    # use flag for batch normalization
 
         # Initialize network parameters        
         self.__init_weight(weight_init_std)
@@ -44,21 +49,30 @@ class MultiLayerNet:
         self.layers = OrderedDict()
         for idx in range(1, self.num_hidden_layer + 1):
             self.layers['Affine' + str(idx)] = Affine(self.params['W' + str(idx)], self.params['b' + str(idx)])
+            if self.use_batchnorm:
+                self.params['gamma' + str(idx)] = np.ones(self.num_hidden_node_list[idx - 1])
+                self.params['beta' + str(idx)] = np.zeros(self.num_hidden_node_list[idx - 1])
+                self.layers['BatchNorm' + str(idx)] = BatchNorm(self.params['gamma' + str(idx)], self.params['beta' + str(idx)])
             self.layers['Activation_function' + str(idx)] = net_layer_var[activation]()
+            if self.use_dropout:
+                self.layers['Dropout' + str(idx)] = Dropout(self.dropout_ratio)
         idx = self.num_hidden_layer + 1
         self.layers['Affine' + str(idx)] = Affine(self.params['W' + str(idx)], self.params['b' + str(idx)])
         self.lastLayer = SoftmaxWithLoss()
 
     # Predict a response
-    def predict(self, x):
-        for layer in self.layers.values():
-            x = layer.forward(x)
+    def predict(self, x, train_flag=False):
+        for key, layer in self.layers.items():
+            if "Dropout" in key or "BatchNorm" in key:
+                x = layer.forward(x, train_flag)
+            else:
+                x = layer.forward(x)
 
         return x
 
     # Calculate a loss value
-    def loss(self, x, t):
-        y = self.predict(x)
+    def loss(self, x, t, train_flag=False):
+        y = self.predict(x, train_flag)
         panelty = 0
         for idx in range(1, self.num_hidden_layer + 2):
             W = self.params['W' + str(idx)]
@@ -68,7 +82,7 @@ class MultiLayerNet:
 
     # Calculate an accuracy
     def accuracy(self, x, t):
-        y = self.predict(x)
+        y = self.predict(x, train_flag=False)
         y = np.argmax(y, axis=1)
         if t.ndim != 1:
             t = np.argmax(t, axis=1)
@@ -79,20 +93,23 @@ class MultiLayerNet:
     # Calculate numerical gradients
     def numerical_gradient(self, x, t):
         # Do forward computations
-        loss_W = lambda W: self.loss(x, t)
+        loss_W = lambda W: self.loss(x, t, train_flag=True)
 
         # Calculate gradients
         grads = {}
         for idx in range(1, self.num_hidden_layer + 2):
             grads['W' + str(idx)] = self.gr.numerical_gradient(loss_W, self.params['W' + str(idx)])
             grads['b' + str(idx)] = self.gr.numerical_gradient(loss_W, self.params['b' + str(idx)])
+            if self.use_batchnorm and idx != self.num_hidden_layer + 1:
+                grads['gamma' + str(idx)] = self.gr.numerical_gradient(loss_W, self.params['gamma' + str(idx)])
+                grads['beta' + str(idx)] = self.gr.numerical_gradient(loss_W, self.params['beta' + str(idx)])
 
         return grads
 
     # Calculate gradients using backpropagations
     def backprop_gradient(self, x, t):
         # Do forward computations
-        self.loss(x, t)
+        self.loss(x, t, train_flag=True)
 
         # Do backward computations
         dout = 1
@@ -107,5 +124,8 @@ class MultiLayerNet:
         for idx in range(1, self.num_hidden_layer + 2):
             grads['W' + str(idx)] = self.layers['Affine' + str(idx)].dW + self.weight_decay_lambda * self.layers['Affine' + str(idx)].W
             grads['b' + str(idx)] = self.layers['Affine' + str(idx)].db
+            if self.use_batchnorm and idx != self.num_hidden_layer + 1:
+                grads['gamma' + str(idx)] = self.layers['BatchNorm' + str(idx)].dgamma
+                grads['beta' + str(idx)] = self.layers['BatchNorm' + str(idx)].dbeta
 
         return grads

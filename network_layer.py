@@ -190,17 +190,17 @@ class BatchNorm:
             mu = x.mean(axis=0)
             xc = x - mu
             var = np.mean(xc**2, axis=0)
-            std = np.sqrt(var + 1e-7)
+            std = np.sqrt(var + 10e-7)
             xn = xc / std
             self.batch_size = x.shape[0]
             self.xc = xc
             self.xn = xn
             self.std = std
             self.running_mean = self.momentum * self.running_mean + (1.0 - self.momentum) * mu
-            self.running_var = self.momentum * self.running_var + (1.0 - self.momentum)
+            self.running_var = self.momentum * self.running_var + (1.0 - self.momentum) * var
         else:
             xc = x - self.running_mean
-            xn = xc / ((np.sqrt(self.running_var + 1e-7)))
+            xn = xc / ((np.sqrt(self.running_var + 10e-7)))
 
         out = self.gamma * xn + self.beta
 
@@ -223,12 +223,12 @@ class BatchNorm:
         dgamma = np.sum(self.xn * dout, axis=0)
         dxn = self.gamma * dout
         dxc = dxn / self.std
-        dstd = -np.sum((dxn * self.xc0) / (self.std * self.std), axis=0)
+        dstd = -np.sum((dxn * self.xc) / (self.std * self.std), axis=0)
         dvar = 0.5 * dstd / self.std
         dxc += (2.0 / self.batch_size) * self.xc * dvar
         dmu = np.sum(dxc, axis=0)
         dx = dxc - dmu / self.batch_size
         self.dgamma = dgamma
-        self.debeta = dbeta
+        self.dbeta = dbeta
 
         return dx
