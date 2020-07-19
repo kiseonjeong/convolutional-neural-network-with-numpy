@@ -2,7 +2,7 @@ import numpy as np
 from activation_function import ActFunc
 from cost_function import CostFunc
 
-# The multiply layer
+# The multiplication layer
 class MulLayer:
     # Object initializer
     def __init__(self):
@@ -64,7 +64,7 @@ class Relu:
 
         return dx
 
-# The Sigmoid layer
+# The sigmoid layer
 class Sigmoid:
     # Object initializer
     def __init__(self):
@@ -83,7 +83,7 @@ class Sigmoid:
 
         return dx
 
-# The Affine layer
+# The affine layer
 class Affine:
     # Object initializer
     def __init__(self, W, b):
@@ -108,7 +108,7 @@ class Affine:
 
         return dx
 
-# The Softmax with loss layer
+# The softmax with loss layer
 class SoftmaxWithLoss:
     # Object initializer
     def __init__(self):
@@ -130,5 +130,105 @@ class SoftmaxWithLoss:
     def backward(self, dout=1):
         batch_size = self.t.shape[0]
         dx = (self.y - self.t) / batch_size
+
+        return dx
+
+# The dropout layer
+class Dropout:
+    # Object initializer
+    def __init__(self, dropout_ratio=0.5):
+        self.dropout_ratio = dropout_ratio
+        self.mask = None
+
+    # Do forward computations
+    def forward(self, x, train_flag=True):
+        if train_flag:
+            self.mask = np.random.rand(*x.shape) > self.dropout_ratio
+            return x * self.mask
+        else:
+            return x * (1.0 - self.dropout_ratio)
+
+    # Do backward computations
+    def backward(self, dout=1):
+        return dout * self.mask
+
+# The batch-normalization layer
+class BatchNorm:
+    # Object initializer
+    def __init__(self, gamma, beta, momentum=0.9, running_mean=None, running_var=None):
+        self.gamma = gamma
+        self.beta = beta
+        self.momentum = momentum
+        self.input_shape = None    # in case of convolution layer : 4d, in case of fully connected layer : 2d
+        self.running_mean = running_mean
+        self.running_var = running_var
+        self.batch_size = None
+        self.xc = None
+        self.std = None
+        self.dgamma = None
+        self.dbeta = None
+
+    # Do forward computations
+    def forward(self, x, train_flag=True):
+        self.input_shape = x.shape
+        if x.ndim != 2:
+            N, C, H, W = x.shape
+            x = x.reshape(N, -1)
+
+        out = self.__forward(x, train_flag)
+
+        return out.reshape(*self.input_shape)
+
+    # Do forward computations
+    def __forward(self, x, train_flag=True):
+        if self.running_mean is None:
+            N, D = x.shape
+            self.running_mean = np.zeros(D)
+            self.running_var = np.zeros(D)
+
+        if train_flag:
+            mu = x.mean(axis=0)
+            xc = x - mu
+            var = np.mean(xc**2, axis=0)
+            std = np.sqrt(var + 1e-7)
+            xn = xc / std
+            self.batch_size = x.shape[0]
+            self.xc = xc
+            self.xn = xn
+            self.std = std
+            self.running_mean = self.momentum * self.running_mean + (1.0 - self.momentum) * mu
+            self.running_var = self.momentum * self.running_var + (1.0 - self.momentum)
+        else:
+            xc = x - self.running_mean
+            xn = xc / ((np.sqrt(self.running_var + 1e-7)))
+
+        out = self.gamma * xn + self.beta
+
+        return out
+
+    # Do backward computations
+    def backward(self, dout):
+        if dout.ndim != 2:
+            N, C, H, W = dout.shape
+            dout = dout.reshape(N - 1)
+
+        dx = self.__backward(dout)
+        dx = dx.reshape(*self.input_shape)
+
+        return dx
+
+    # Do backward computations
+    def __backward(self, dout):
+        dbeta = dout.sum(axis=0)
+        dgamma = np.sum(self.xn * dout, axis=0)
+        dxn = self.gamma * dout
+        dxc = dxn / self.std
+        dstd = -np.sum((dxn * self.xc0) / (self.std * self.std), axis=0)
+        dvar = 0.5 * dstd / self.std
+        dxc += (2.0 / self.batch_size) * self.xc * dvar
+        dmu = np.sum(dxc, axis=0)
+        dx = dxc - dmu / self.batch_size
+        self.dgamma = dgamma
+        self.debeta = dbeta
 
         return dx
