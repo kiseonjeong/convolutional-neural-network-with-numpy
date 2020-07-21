@@ -274,10 +274,10 @@ class BatchNorm:
 
         return dx
 
-# The convolution layer
-class Convolution:
-    """ 
-    Convolution layer
+# The data trick for convolutional neural network
+class Trick:
+    """
+    Trick for convolutional neural network
 
     Parameters
     ----------
@@ -285,35 +285,12 @@ class Convolution:
     pad : data padding length\n
     """
     # Object initializer
-    def __init__(self, W, b, stride=1, pad=0):
-        self.W = W
-        self.b = b
-        self.stride = stride
+    def __init__(self, pad, stride):
         self.pad = pad
-
-    # Do forward computations
-    def forward(self, x):
-        # Calculate output resolution information
-        FN, C, FH, FW = self.W.shape
-        N, C, H, W = x.shape
-        out_h = 1 + int((H + 2 * self.pad - FH) / self.stride)
-        out_w = 1 + int((W + 2 * self.pad - FW) / self.stride)
-
-        # Apply the im2col
-        col = self.__im2col(x, FH, FW)
-        col_W = self.W.reshape(FN, -1).T
-
-        # Calculate forward computations like affine layer
-        out = np.dot(col, col_W) + self.b
-        out = out.reshape(N, out_h, out_w, -1).transpose(0, 3, 1, 2)
-        self.x = x
-        self.col = col
-        self.col_W = col_W
-
-        return out
+        self.stride = stride
 
     # Convert image to column
-    def __im2col(self, input_data, filter_h, filter_w):
+    def im2col(self, input_data, filter_h, filter_w):
         # Calculate result resolution information
         N, C, H, W = input_data.shape
         out_h = (H + 2 * self.pad - filter_h) // self.stride + 1
@@ -333,23 +310,8 @@ class Convolution:
 
         return col
 
-    # Do backward computations
-    def backward(self, dout):
-        # Calculate output resolution information
-        FN, C, FH, FW = self.W.shape
-        dout = dout.transpose(0, 2, 3, 1).reshape(-1, FN)
-
-        # Calculate gradients
-        self.db = np.sum(dout, axis=0)
-        self.dW = np.dot(self.col.T, dout)
-        self.dW = self.dW.transpose(1, 0).reshape(FN, C, FH, FW)
-        dcol = np.dot(dout, self.col_W.T)
-        dx = self.__col2im(dcol, self.x.shape, FH, FW, self.stride, self.pad)
-
-        return dx
-
     # Convert column to image
-    def __col2im(self, col, input_shape, filter_h, filter_w):
+    def col2im(self, col, input_shape, filter_h, filter_w):
         # Calculate result resolution information
         N, C, H, W = input_shape.shape
         out_h = (H + 2 * self.pad - filter_h) // self.stride + 1
@@ -365,3 +327,116 @@ class Convolution:
                 img[:, :, y:y_max:self.stride, x:x_max:self.stride] += col[:, :, y, x, :, :]
 
         return img[:, :, self.pad:H + self.pad, self.pad:W + self.pad]
+
+# The convolution layer
+class Convolution(Trick):
+    """ 
+    Convolution layer
+
+    Parameters
+    ----------
+    W : kernel\n
+    b : bias\n
+    stride : sliding interval\n
+    pad : data padding length\n
+    """
+    # Object initializer
+    def __init__(self, W, b, stride=1, pad=0):
+        super().__init__(pad, stride)
+        self.W = W
+        self.b = b
+        self.stride = stride
+        self.pad = pad
+
+    # Do forward computations
+    def forward(self, x):
+        # Calculate output resolution information
+        FN, C, FH, FW = self.W.shape
+        N, C, H, W = x.shape
+        out_h = 1 + int((H + 2 * self.pad - FH) / self.stride)
+        out_w = 1 + int((W + 2 * self.pad - FW) / self.stride)
+        
+        # Apply the im2col
+        col = self.im2col(x, FH, FW)
+        col_W = self.W.reshape(FN, -1).T
+
+        # Calculate forward computations like affine layer
+        out = np.dot(col, col_W) + self.b
+        out = out.reshape(N, out_h, out_w, -1).transpose(0, 3, 1, 2)
+        self.x = x
+        self.col = col
+        self.col_W = col_W
+
+        return out
+
+    # Do backward computations
+    def backward(self, dout):
+        # Calculate output resolution information
+        FN, C, FH, FW = self.W.shape
+        dout = dout.transpose(0, 2, 3, 1).reshape(-1, FN)
+
+        # Calculate gradients
+        self.db = np.sum(dout, axis=0)
+        self.dW = np.dot(self.col.T, dout)
+        self.dW = self.dW.transpose(1, 0).reshape(FN, C, FH, FW)
+        dcol = np.dot(dout, self.col_W.T)
+        dx = self.col2im(dcol, self.x.shape, FH, FW, self.stride, self.pad)
+
+        return dx
+
+# The pooling layer
+class Pooling(Trick):
+    """ 
+    Pooling layer
+
+    Parameters
+    ----------
+    pool_h : pooling height\n
+    pool_w : pooling width\n
+    stride : sliding interval\n
+    pad : data padding length\n
+    """
+    # Object initializer
+    def __init__(self, pool_h, pool_w, stride=1, pad=0):
+        super().__init__(pad, stride)
+        self.pool_h = pool_h
+        self.pool_w = pool_w
+        self.stride = stride
+        self.pad = pad
+        self.x = None
+        self.arg_max = None
+
+    # Do forward computations
+    def forward(self, x):
+        # Calculate output resolution information
+        N, C, H, W = x.shape
+        out_h = 1 + int(1 + (H - self.pool_h) / self.stride)
+        out_w = 1 + int(1 + (W - self.pool_w) / self.stride)
+        
+        # Apply the im2col
+        col = self.im2col(x, self.pool_h, self.pool_w)
+        col = col.reshape(-1, self.pool_h * self.pool_w)
+
+        # Do max pooling
+        arg_max = np.argmax(col, axis=1)
+        out = np.max(col, axis=1)
+        out = out.reshape(N, out_h, out_w, C).transpose(0, 3, 1, 2)
+        self.x = x
+        self.arg_max = arg_max
+
+        return out
+
+    # Do backward computations
+    def backward(self, dout):
+        # Calculate output resolution information
+        dout = dout.transpose(0, 2, 3, 1)
+        pool_size = self.pool_h * self.pool_w
+
+        # Calculate gradients
+        dmax = np.zeros((dout.size, pool_size))
+        dmax[np.arange(self.arg_max.size), self.arg_max.flatten()] = dout.flatten()
+        dmax = dmax.reshape(dout.shape + (pool_size,))
+        dcol = dmax.reshape(dmax.shape[0] * dmax.shape[1] * dmax.shape[2], -1)
+        dx = self.col2im(dcol, self.x.shape, self.pool_h, self.pool_w, self.stride, self.pad)
+
+        return dx
