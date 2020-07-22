@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pylab as plt
-from dataset.mnist import load_mnist
-from multi_layer_network import MultiLayerNet
-from network_optimizer import *
-from network_trainer import NetTrainer
+from dataset.mnist import *
+from network.optimizer import *
+from network.multi_layer_network import *
+from network.trainer import *
 
 # Load the MNIST dataset
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
@@ -11,6 +11,10 @@ from network_trainer import NetTrainer
 # Do test for overfit
 x_train = x_train[:300]
 t_train = t_train[:300]
+
+# Generate the dataset
+dataset_train = Dataset(x_train, t_train)
+dataset_test = Dataset(x_test, t_test)
 
 # The hyperparameters
 max_epochs = 100
@@ -30,7 +34,7 @@ use_batchnorm = False
 network = MultiLayerNet(num_input_node, hidden_architecture, num_output_node, activation_type, weight_init_std, \
                         weight_decay_lambda, use_dropout, dropout_ratio, use_batchnorm)
 optimizer = SGD(lr=learning_rate)
-trainer = NetTrainer(x_train, t_train, x_test, t_test, network, max_epochs, iters_num, batch_size, optimizer)
+trainer = NetTrainer(dataset_train, dataset_test, network, max_epochs, iters_num, batch_size, optimizer)
 
 # Do training on the network
 trainer.train_network()

@@ -1,7 +1,7 @@
 import numpy as np
-from numpy.lib import stride_tricks
-from activation_function import ActFunc
-from cost_function import CostFunc
+from function.activation import *
+from function.cost import *
+from utility.trick import *
 
 # The addition layer
 class AddLayer:
@@ -138,14 +138,12 @@ class SoftmaxWithLoss:
         self.loss = None
         self.y = None
         self.t = None
-        self.af = ActFunc()
-        self.cf = CostFunc()
 
     # Do forward computations
     def forward(self, x, t):
         self.t = t
-        self.y = self.af.softmax(x)
-        self.loss = self.cf.cross_entropy_error(self.y, self.t)
+        self.y = softmax(x)
+        self.loss = cross_entropy_error(self.y, self.t)
 
         return self.loss
 
@@ -274,62 +272,8 @@ class BatchNorm:
 
         return dx
 
-# The data trick for convolutional neural network
-class Trick:
-    """
-    Trick for convolutional neural network
-
-    Parameters
-    ----------
-    stride : sliding interval\n
-    pad : data padding length\n
-    """
-    # Object initializer
-    def __init__(self, pad, stride):
-        self.pad = pad
-        self.stride = stride
-
-    # Convert image to column
-    def im2col(self, input_data, filter_h, filter_w):
-        # Calculate result resolution information
-        N, C, H, W = input_data.shape
-        out_h = (H + 2 * self.pad - filter_h) // self.stride + 1
-        out_w = (W + 2 * self.pad - filter_w) // self.stride + 1
-
-        # Do padding on the input data
-        img = np.pad(input_data, [(0, 0), (0, 0), (self.pad, self.pad), (self.pad, self.pad)], 'constant')
-        col = np.zeros((N, C, filter_h, filter_w, out_h, out_w))
-
-        # Generate the column data
-        for y in range(filter_h):
-            y_max = y + self.stride * out_h
-            for x in range(filter_w):
-                x_max = x + self.stride * out_w
-                col[:, :, y, x, :, :] = img[:, :, y:y_max:self.stride, x:x_max:self.stride]
-        col = col.transpose(0, 4, 5, 1, 2, 3).reshape(N * out_h * out_w, -1)
-
-        return col
-
-    # Convert column to image
-    def col2im(self, col, input_shape, filter_h, filter_w):
-        # Calculate result resolution information
-        N, C, H, W = input_shape.shape
-        out_h = (H + 2 * self.pad - filter_h) // self.stride + 1
-        out_w = (W + 2 * self.pad - filter_w) // self.stride + 1
-        col = col.reshape(N, out_h, out_w, C, filter_h, filter_w).transpose(0, 3, 4, 5, 1, 2)
-
-        # Generate the image data
-        img = np.zeros((N, C, H + 2 * self.pad + self.stride - 1, W + 2 * self.pad + self.stride - 1))
-        for y in range(filter_h):
-            y_max = y + self.stride * out_h
-            for x in range(filter_w):
-                x_max = x + self.stride * out_w
-                img[:, :, y:y_max:self.stride, x:x_max:self.stride] += col[:, :, y, x, :, :]
-
-        return img[:, :, self.pad:H + self.pad, self.pad:W + self.pad]
-
 # The convolution layer
-class Convolution(Trick):
+class Convolution:
     """ 
     Convolution layer
 
@@ -342,7 +286,6 @@ class Convolution(Trick):
     """
     # Object initializer
     def __init__(self, W, b, stride=1, pad=0):
-        super().__init__(pad, stride)
         self.W = W
         self.b = b
         self.stride = stride
@@ -357,7 +300,7 @@ class Convolution(Trick):
         out_w = 1 + int((W + 2 * self.pad - FW) / self.stride)
         
         # Apply the im2col
-        col = self.im2col(x, FH, FW)
+        col = im2col(x, FH, FW, self.stride, self.pad)
         col_W = self.W.reshape(FN, -1).T
 
         # Calculate forward computations like affine layer
@@ -380,12 +323,12 @@ class Convolution(Trick):
         self.dW = np.dot(self.col.T, dout)
         self.dW = self.dW.transpose(1, 0).reshape(FN, C, FH, FW)
         dcol = np.dot(dout, self.col_W.T)
-        dx = self.col2im(dcol, self.x.shape, FH, FW, self.stride, self.pad)
+        dx = col2im(dcol, self.x.shape, FH, FW, self.stride, self.pad)
 
         return dx
 
 # The pooling layer
-class Pooling(Trick):
+class Pooling:
     """ 
     Pooling layer
 
@@ -414,7 +357,7 @@ class Pooling(Trick):
         out_w = 1 + int(1 + (W - self.pool_w) / self.stride)
         
         # Apply the im2col
-        col = self.im2col(x, self.pool_h, self.pool_w)
+        col = im2col(x, self.pool_h, self.pool_w, self.stride, self.pad)
         col = col.reshape(-1, self.pool_h * self.pool_w)
 
         # Do max pooling
@@ -437,6 +380,6 @@ class Pooling(Trick):
         dmax[np.arange(self.arg_max.size), self.arg_max.flatten()] = dout.flatten()
         dmax = dmax.reshape(dout.shape + (pool_size,))
         dcol = dmax.reshape(dmax.shape[0] * dmax.shape[1] * dmax.shape[2], -1)
-        dx = self.col2im(dcol, self.x.shape, self.pool_h, self.pool_w, self.stride, self.pad)
+        dx = col2im(dcol, self.x.shape, self.pool_h, self.pool_w, self.stride, self.pad)
 
         return dx

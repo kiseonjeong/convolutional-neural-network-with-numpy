@@ -1,9 +1,7 @@
 from collections import OrderedDict
 import numpy as np
-from activation_function import ActFunc
-from cost_function import CostFunc
-from numerical_gradient import NumGrad
-from network_layer import *
+from network.layer import *
+from utility.gradient import *
 
 # The neural network with multi-layers
 class MultiLayerNet:
@@ -12,9 +10,6 @@ class MultiLayerNet:
                 activation='relu', weight_init_std='relu', weight_decay_lambda=0,
                 use_dropout=False, dropout_ratio=0.5, use_batchnorm=False):
         # Initialize parameters
-        self.af = ActFunc()    # activation function
-        self.cf = CostFunc()    # cost function
-        self.gr = NumGrad()    # gradient calculator
         self.num_input_node = num_input_node    # input node information
         self.num_hidden_node_list = num_hidden_node_list    # hidden node information
         self.num_hidden_layer = len(num_hidden_node_list)    # number of hidden layers
@@ -98,11 +93,11 @@ class MultiLayerNet:
         # Calculate gradients
         grads = {}
         for idx in range(1, self.num_hidden_layer + 2):
-            grads['W' + str(idx)] = self.gr.numerical_gradient(loss_W, self.params['W' + str(idx)])
-            grads['b' + str(idx)] = self.gr.numerical_gradient(loss_W, self.params['b' + str(idx)])
+            grads['W' + str(idx)] = numerical_gradient(loss_W, self.params['W' + str(idx)])
+            grads['b' + str(idx)] = numerical_gradient(loss_W, self.params['b' + str(idx)])
             if self.use_batchnorm and idx != self.num_hidden_layer + 1:
-                grads['gamma' + str(idx)] = self.gr.numerical_gradient(loss_W, self.params['gamma' + str(idx)])
-                grads['beta' + str(idx)] = self.gr.numerical_gradient(loss_W, self.params['beta' + str(idx)])
+                grads['gamma' + str(idx)] = numerical_gradient(loss_W, self.params['gamma' + str(idx)])
+                grads['beta' + str(idx)] = numerical_gradient(loss_W, self.params['beta' + str(idx)])
 
         return grads
 

@@ -1,18 +1,13 @@
 from collections import OrderedDict
 import numpy as np
-from activation_function import ActFunc
-from cost_function import CostFunc
-from numerical_gradient import NumGrad
-from network_layer import *
+from network.layer import *
+from utility.gradient import *
 
 # The neural network with two layers
 class TwoLayerNet:
     # Object initializer
     def __init__(self, num_input_node, num_hidden_node, num_output_node, weight_init_std=0.01):
         # Initialize parameters
-        self.af = ActFunc()    # activation function
-        self.cf = CostFunc()    # cost function
-        self.gr = NumGrad()    # gradient calculator
         self.num_input_node = num_input_node    # input node information
         self.num_hidden_node = num_hidden_node    # hidden node information
         self.num_output_node = num_output_node    # output node information
@@ -61,10 +56,10 @@ class TwoLayerNet:
 
         # Calculate gradients
         grads = {}
-        grads['W1'] = self.gr.numerical_gradient(loss_W, self.params['W1'])
-        grads['b1'] = self.gr.numerical_gradient(loss_W, self.params['b1'])
-        grads['W2'] = self.gr.numerical_gradient(loss_W, self.params['W2'])
-        grads['b2'] = self.gr.numerical_gradient(loss_W, self.params['b2'])
+        grads['W1'] = numerical_gradient(loss_W, self.params['W1'])
+        grads['b1'] = numerical_gradient(loss_W, self.params['b1'])
+        grads['W2'] = numerical_gradient(loss_W, self.params['W2'])
+        grads['b2'] = numerical_gradient(loss_W, self.params['b2'])
 
         return grads
 

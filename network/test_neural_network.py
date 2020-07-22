@@ -1,12 +1,12 @@
-from activation_function import ActFunc
-from dataset.mnist import *
+import numpy as np
+from dataset.mnist import load_mnist
+from function.activation import *
 
 # The test neural network with three layers
 class TestNet:
     # Object initializer
     def __init__(self):
         self.network = {}
-        self.func = ActFunc()
 
     # Get the dataset
     def get_data(self):
@@ -24,11 +24,11 @@ class TestNet:
         b1, b2, b3 = self.network['b1'], self.network['b2'], self.network['b3']
 
         a1 = np.dot(x, W1) + b1
-        z1 = self.func.sigmoid(a1)
+        z1 = sigmoid(a1)
         a2 = np.dot(z1, W2) + b2
-        z2 = self.func.sigmoid(a2)
+        z2 = sigmoid(a2)
         a3 = np.dot(z2, W3) + b3
-        y = self.func.identity_function(a3)
+        y = identity_function(a3)
 
         return y
 
@@ -38,11 +38,11 @@ class TestNet:
         b1, b2, b3 = self.network['b1'], self.network['b2'], self.network['b3']
 
         a1 = np.dot(x, W1) + b1
-        z1 = self.func.sigmoid(a1)
+        z1 = sigmoid(a1)
         a2 = np.dot(z1, W2) + b2
-        z2 = self.func.sigmoid(a2)
+        z2 = sigmoid(a2)
         a3 = np.dot(z2, W3) + b3
-        y = self.func.softmax(a3)
+        y = softmax(a3)
 
         return y
 
