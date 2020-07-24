@@ -1,23 +1,84 @@
 import numpy as np
 
-# Step function
+def identity_function(x):
+    """
+    (function) identity_function
+    ----------------------------
+    The identity function
+
+    Parameter
+    ---------
+    - x : input value(s)\n
+
+    Return
+    ------
+    - identity function output value(s)\n
+    """
+    return x
+
 def step_function(x):
+    """
+    (function) step_function
+    ------------------------
+    The step function
+
+    Parameter
+    ---------
+    - x : input value(s)\n
+
+    Return
+    ------
+    - step function output value(s)\n
+    """
     return np.array(x > 0, dtype=np.int)
 
-# Sigmoid function
 def sigmoid(x):
+    """
+    (function) sigmoid
+    ------------------
+    The sigmoid function
+
+    Parameter
+    ---------
+    - x : input value(s)\n
+
+    Return
+    ------
+    - sigmoid function output value(s)\n
+    """
     return 1 / (1 + np.exp(-x))
 
-# ReLU function
 def relu(x):
-    return np.maximum(0, x)
+    """
+    (function) relu
+    ---------------
+    The ReLU function
 
-# Identity function
-def identity_function(x):
-    return x
+    Parameter
+    ---------
+    - x : input value(s)\n
+
+    Return
+    ------
+    - ReLU function output value(s)\n
+    """
+    return np.maximum(0, x)
 
 # Softmax function
 def softmax(x):
+    """
+    (function) softmax
+    ------------------
+    The softmax function
+
+    Parameter
+    ---------
+    - x : input vector\n
+
+    Return
+    ------
+    - softmax function output vector = probability vector\n
+    """
     if x.ndim == 2:
         x = x.T
         x = x - np.max(x, axis=0)

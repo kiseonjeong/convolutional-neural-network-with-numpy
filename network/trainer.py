@@ -5,8 +5,22 @@ from network.optimizer import *
 # The dataset for trainer
 Dataset = namedtuple('Dataset', 'x t')
 
-# The neural network trainer
 class NetTrainer:
+    """
+    (class) NetTrainer
+    ------------------
+    - The three layer neural network for testing
+
+    Parameter
+    ---------
+    - dataset_train : train dataset (x, t)\n
+    - dataset_test : test dataset (x, t)\n
+    - neural_network : network architecture\n
+    - max_epochs : number of maximum epochs\n
+    - iters_num : maximum iterations\n
+    - batch_size : size of batch data\n
+    - optimizer : gradient descent optimizer\n
+    """
     # Object initializer
     def __init__(self, dataset_train, dataset_test, neural_network,
                 max_epochs, iters_num, batch_size, optimizer = Adam()):

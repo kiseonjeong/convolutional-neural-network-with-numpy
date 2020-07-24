@@ -1,7 +1,23 @@
 import numpy as np
 
-# Convert image to column
 def im2col(input_data, filter_h, filter_w, stride, pad):
+    """
+    (function) im2col
+    -----------------
+    - Convert the shape of the data from image to column
+
+    Parameter
+    ---------
+    - input_data : input data\n
+    - filter_h : filter height\n
+    - filter_w : filter width\n
+    - stride : sliding interval\n
+    - pad : boundary padding length\n
+
+    Return
+    ------
+    - reshaped column data\n
+    """
     # Calculate result resolution information
     N, C, H, W = input_data.shape
     out_h = (H + 2 * pad - filter_h) // stride + 1
@@ -23,6 +39,24 @@ def im2col(input_data, filter_h, filter_w, stride, pad):
 
 # Convert column to image
 def col2im(col, input_shape, filter_h, filter_w, stride, pad):
+    """
+    (function) col2im
+    -----------------
+    - Convert the shape of the data from column to image
+    
+    Parameter
+    ---------
+    - col : column data\n
+    - input_shape : original shape on the input\n
+    - filter_h : filter height\n
+    - filter_w : filter width\n
+    - stride : sliding interval\n
+    - pad : boundary padding length\n
+
+    Return
+    ------
+    - reshaped image data\n
+    """
     # Calculate result resolution information
     N, C, H, W = input_shape.shape
     out_h = (H + 2 * pad - filter_h) // stride + 1

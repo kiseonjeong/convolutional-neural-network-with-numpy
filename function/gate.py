@@ -1,11 +1,11 @@
 import numpy as np
 
-# Weight
+# Weight and bias for test
 W = np.array([0.0, 0.0])
 b = 0.0
 
-# Calculate logical AND gate
 def gate_and(x1, x2):
+    # Calculate logical AND gate
     x = np.array([x1, x2])
     w = np.array([0.5, 0.5])
     b = -0.7
@@ -15,8 +15,8 @@ def gate_and(x1, x2):
     else:
         return 1
 
-# Calculate logical NAND gate
 def gate_nand(x1, x2):
+    # Calculate logical NAND gate
     x = np.array([x1, x2])
     w = np.array([-0.5, -0.5])
     b = 0.7
@@ -26,8 +26,8 @@ def gate_nand(x1, x2):
     else:
         return 1
 
-# Calculate logical OR gate
 def gate_or(x1, x2):
+    # Calculate logical OR gate
     x = np.array([x1, x2])
     w = np.array([0.5, 0.5])
     b = -0.2
@@ -37,8 +37,8 @@ def gate_or(x1, x2):
     else:
         return 1
 
-# Calculate logical XOR gate
 def gate_xor(x1, x2):
+    # Calculate logical XOR gate
     s1 = gate_nand(x1, x2)
     s2 = gate_or(x1, x2)
     y = gate_and(s1, s2)

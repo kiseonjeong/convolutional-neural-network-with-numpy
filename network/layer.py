@@ -3,10 +3,11 @@ from function.activation import *
 from function.cost import *
 from utility.trick import *
 
-# The addition layer
 class AddLayer:
-    """ 
-    Addition layer
+    """
+    (class) AddLayer
+    ----------------
+    - The add layer
     """
     # Object initializer
     def __init__(self):
@@ -25,10 +26,11 @@ class AddLayer:
 
         return dx, dy
 
-# The multiplication layer
 class MulLayer:
-    """ 
-    Multiplication layer
+    """
+    (class) MulLayer
+    ----------------
+    - The multiplication layer
     """
     # Object initializer
     def __init__(self):
@@ -50,10 +52,11 @@ class MulLayer:
 
         return dx, dy
 
-# The sigmoid layer
 class Sigmoid:
-    """ 
-    Sigmoid (Logistic function) layer
+    """
+    (class) Sigmoid
+    ---------------
+    - The sigmoid layer
     """
     # Object initializer
     def __init__(self):
@@ -72,10 +75,11 @@ class Sigmoid:
 
         return dx
 
-# The ReLU layer
 class Relu:
-    """ 
-    ReLU layer
+    """
+    (class) Relu
+    ------------
+    - The ReLU layer
     """
     # Object initializer
     def __init__(self):
@@ -96,10 +100,16 @@ class Relu:
 
         return dx
 
-# The affine layer
 class Affine:
-    """ 
-    Affine layer
+    """
+    (class) Affine
+    --------------
+    - The affine layer
+
+    Parameter
+    ---------
+    - W : weight
+    - b : bias
     """
     # Object initializer
     def __init__(self, W, b):
@@ -128,10 +138,11 @@ class Affine:
 
         return dx
 
-# The softmax with loss layer
 class SoftmaxWithLoss:
-    """ 
-    Softmax with cross entorpy error layer
+    """
+    (class) SoftmaxWithLoss
+    -----------------------
+    - The softmax with cross entropy error layer
     """
     # Object initializer
     def __init__(self):
@@ -154,14 +165,15 @@ class SoftmaxWithLoss:
 
         return dx
 
-# The dropout layer
 class Dropout:
-    """ 
-    Dropout regularization layer
+    """
+    (class) Dropout
+    ---------------
+    - The dropout regularization layer
 
-    Parameters
-    ----------
-    dropout_ratio : 0.0 (no dropout), 1.0 (all dropout)\n
+    Parameter
+    ---------
+    - dropout_ratio : dropout probability (default = 0.5)
     """
     # Object initializer
     def __init__(self, dropout_ratio=0.5):
@@ -180,18 +192,19 @@ class Dropout:
     def backward(self, dout=1):
         return dout * self.mask
 
-# The batch-normalization layer
 class BatchNorm:
-    """ 
-    Batch normalization layer
+    """
+    (class) BatchNorm
+    -----------------
+    - The batch normalization layer
 
-    Parameters
-    ----------
-    gamma : scale parameter\n
-    beta : shift parameter\n
-    momentum : moving average parameter\n
-    running_mean : moving average result of batch means\n
-    running_var : moving average result of batch variances\n
+    Parameter
+    ---------
+    - gamma : scale parameter\n
+    - beta : shift parameter\n
+    - momentum : moving average parameter (default = 0.9)\n
+    - running_mean : moving average result of batch means (default = None)\n
+    - running_var : moving average result of batch variances (default = None)\n
     """
     # Object initializer
     def __init__(self, gamma, beta, momentum=0.9, running_mean=None, running_var=None):
@@ -272,17 +285,18 @@ class BatchNorm:
 
         return dx
 
-# The convolution layer
 class Convolution:
-    """ 
-    Convolution layer
+    """
+    (class) Convolution
+    -------------------
+    - The convolution layer for CNN
 
-    Parameters
-    ----------
-    W : kernel\n
-    b : bias\n
-    stride : sliding interval\n
-    pad : data padding length\n
+    Parameter
+    ---------
+    - W : kernel\n
+    - b : bias\n
+    - stride : sliding interval (default = 1)\n
+    - pad : data padding length (default = 0)\n
     """
     # Object initializer
     def __init__(self, W, b, stride=1, pad=0):
@@ -327,21 +341,21 @@ class Convolution:
 
         return dx
 
-# The pooling layer
 class Pooling:
-    """ 
-    Pooling layer
+    """
+    (class) Pooling
+    ---------------
+    - The pooling layer for CNN
 
-    Parameters
-    ----------
-    pool_h : pooling height\n
-    pool_w : pooling width\n
-    stride : sliding interval\n
-    pad : data padding length\n
+    Parameter
+    ---------
+    - pool_h : pooling height\n
+    - pool_w : pooling width\n
+    - stride : sliding interval (default = 1)\n
+    - pad : data padding length (default = 0)\n
     """
     # Object initializer
     def __init__(self, pool_h, pool_w, stride=1, pad=0):
-        super().__init__(pad, stride)
         self.pool_h = pool_h
         self.pool_w = pool_w
         self.stride = stride

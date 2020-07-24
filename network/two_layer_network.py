@@ -3,8 +3,20 @@ import numpy as np
 from network.layer import *
 from utility.gradient import *
 
-# The neural network with two layers
 class TwoLayerNet:
+    """
+    (class) TwoLayerNet
+    -------------------
+    - The two layer neural network for testing
+
+    Parameter
+    ---------
+    - num_input_node : number of input node\n
+    - num_hidden_node_list : number of hidden node list\n
+    - num_output_node : number of output node\n
+    - weight_init_std : weight sigma value (default = he)\n
+     - he, xavier
+    """
     # Object initializer
     def __init__(self, num_input_node, num_hidden_node, num_output_node, weight_init_std=0.01):
         # Initialize parameters

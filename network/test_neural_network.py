@@ -4,6 +4,11 @@ from function.activation import *
 
 # The test neural network with three layers
 class TestNet:
+    """
+    (class) TestNet
+    ---------------
+    - The three layer neural network for testing
+    """
     # Object initializer
     def __init__(self):
         self.network = {}

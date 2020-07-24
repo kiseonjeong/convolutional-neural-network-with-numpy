@@ -1,11 +1,38 @@
 import numpy as np
 
-# Mean squared error
-def mean_squared_error(y, t):
+def sum_of_squares_error(y, t):
+    """
+    (function) sum_of_squares_error
+    -------------------------------
+    The sum of squares error
+
+    Parameter
+    ---------
+    - y : output value(s)\n
+    - t : target value(s)\n
+
+    Return
+    ------
+    - error value between value(s)\n
+    """
     return 0.5 * np.sum((y - t) ** 2)
 
-# Cross entropy error
 def cross_entropy_error(y, t, one_hot_enc=True):
+    """
+    (function) cross_entropy_error
+    ------------------------------
+    - The cross entropy error
+
+    Parameter
+    ---------
+    - y : output value(s)\n
+    - t : target value(s)\n
+    one_hot_enc : one hot encoding flag (default = True)
+
+    Return
+    ------
+    - error value between value(s)\n
+    """
     if y.ndim == 1:
         t = t.reshape(1, t.size)
         y = y.reshape(1, y.size)

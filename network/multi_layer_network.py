@@ -5,9 +5,28 @@ from utility.gradient import *
 
 # The neural network with multi-layers
 class MultiLayerNet:
+    """
+    (class) MultiLayerNet
+    ---------------------
+    - The multi layer neural network
+
+    Parameter
+    ---------
+    - num_input_node : number of input node\n
+    - num_hidden_node_list : number of hidden node list\n
+    - num_output_node : number of output node\n
+    - activation : activation function type (default = relu)\n
+     - relu, sigmoid
+    - weight_init_std : weight sigma value (default = he)\n
+     - he, xavier
+    - weight_decay_lambda : weight decay panelty parameter (default = 0)\n
+    - use_dropout : dropout flag (default = False)\n
+    - dropout_ratio : dropout probability (default = 0.5)\n
+    - use_batchnorm : batch normalization flag (default = False)\n
+    """
     # Object initializer
     def __init__(self, num_input_node, num_hidden_node_list, num_output_node, 
-                activation='relu', weight_init_std='relu', weight_decay_lambda=0,
+                activation='relu', weight_init_std='he', weight_decay_lambda=0,
                 use_dropout=False, dropout_ratio=0.5, use_batchnorm=False):
         # Initialize parameters
         self.num_input_node = num_input_node    # input node information

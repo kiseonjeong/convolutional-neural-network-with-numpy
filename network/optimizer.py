@@ -1,7 +1,15 @@
 import numpy as np
 
-# The SGD optimizer
 class SGD:
+    """
+    (class) SGD
+    -----------
+    - The SGD optimizer
+
+    Parameter
+    ---------
+    - lr : learning rate (default = 0.01)\n
+    """
     # Object initializer
     def __init__(self, lr=0.01):
         self.lr = lr
@@ -11,8 +19,17 @@ class SGD:
         for key, val in params.items():
             params[key] -= self.lr * grads[key]
 
-# The Momentum optimizer
 class Momentum:
+    """
+    (class) Momentum
+    ----------------
+    - The Momentum optimizer
+
+    Parameter
+    ---------
+    - lr : learning rate (default = 0.01)\n
+    - momentum : momentum value (default = 0.9)\n
+    """
     # Object initializer
     def __init__(self, lr=0.01, momentum=0.9):
         self.lr = lr
@@ -30,8 +47,17 @@ class Momentum:
             self.v[key] = self.momentum * self.v[key] - self.lr * grads[key]
             params[key] += self.v[key]
 
-# The Nesterov optimizer
 class Nesterov:
+    """
+    (class) Nesterov
+    ----------------
+    - The Nesterov optimizer
+
+    Parameter
+    ---------
+    - lr : learning rate (default = 0.01)\n
+    - momentum : momentum parameter (default = 0.9)\n
+    """
     # Object initializer
     def __init__(self, lr=0.01, momentum=0.9):
         self.lr = lr
@@ -51,8 +77,16 @@ class Nesterov:
             params[key] += self.momentum * self.momentum * self.v[key]
             params[key] -= (1 + self.momentum) * self.lr * grads[key]
 
-# The AdaGrad optimizer
 class AdaGrad:
+    """
+    (class) AdaGrad
+    ---------------
+    - The AdaGrad optimizer
+
+    Parameter
+    ---------
+    - lr : learning rate (default = 0.01)\n
+    """
     # Object initializer
     def __init__(self, lr=0.01):
         self.lr = lr
@@ -69,8 +103,17 @@ class AdaGrad:
             self.h[key] += grads[key] * grads[key]
             params[key] -= self.lr * grads[key] / (np.sqrt(self.h[key]) + 1e-7)
 
-# The RMSprop optimizer
 class RMSprop:
+    """
+    (class) RMSprop
+    ---------------
+    - The RMSprop optimizer
+
+    Parameter
+    ---------
+    - lr : learning rate (default = 0.01)\n
+    - decay_rate : decay parameter (default = 0.99)\n
+    """
     # Object initializer
     def __init__(self, lr=0.01, decay_rate = 0.99):
         self.lr = lr
@@ -89,8 +132,18 @@ class RMSprop:
             self.h[key] += (1 - self.decay_rate) * grads[key] * grads[key]
             params[key] -= self.lr * grads[key] / (np.sqrt(self.h[key]) + 1e-7)
 
-# The Adam optimizer
 class Adam:
+    """
+    (class) Adam
+    ------------
+    - The Adam optimizer
+
+    Parameter
+    ---------
+    - lr : learning rate (default = 0.001)\n
+    - beta1 : beta1 parameter (default = 0.9)\n
+    - beta2 : beta2 parameter (default = 0.999)\n
+    """
     # Object initializer
     def __init__(self, lr=0.001, beta1=0.9, beta2=0.999):
         self.lr = lr
