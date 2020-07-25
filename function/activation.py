@@ -8,11 +8,11 @@ def identity_function(x):
 
     Parameter
     ---------
-    - x : input value(s)\n
+    - x : input value(s)
 
     Return
     ------
-    - identity function output value(s)\n
+    - identity function output value(s)
     """
     return x
 
@@ -24,11 +24,11 @@ def step_function(x):
 
     Parameter
     ---------
-    - x : input value(s)\n
+    - x : input value(s)
 
     Return
     ------
-    - step function output value(s)\n
+    - step function output value(s)
     """
     return np.array(x > 0, dtype=np.int)
 
@@ -40,11 +40,11 @@ def sigmoid(x):
 
     Parameter
     ---------
-    - x : input value(s)\n
+    - x : input value(s)
 
     Return
     ------
-    - sigmoid function output value(s)\n
+    - sigmoid function output value(s)
     """
     return 1 / (1 + np.exp(-x))
 
@@ -56,11 +56,11 @@ def relu(x):
 
     Parameter
     ---------
-    - x : input value(s)\n
+    - x : input value(s)
 
     Return
     ------
-    - ReLU function output value(s)\n
+    - ReLU function output value(s)
     """
     return np.maximum(0, x)
 
@@ -73,11 +73,11 @@ def softmax(x):
 
     Parameter
     ---------
-    - x : input vector\n
+    - x : input vector
 
     Return
     ------
-    - softmax function output vector = probability vector\n
+    - softmax function output vector = probability vector
     """
     if x.ndim == 2:
         x = x.T

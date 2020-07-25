@@ -9,17 +9,17 @@ class NetTrainer:
     """
     (class) NetTrainer
     ------------------
-    - The three layer neural network for testing
+    - The network trainer
 
     Parameter
     ---------
-    - dataset_train : train dataset (x, t)\n
-    - dataset_test : test dataset (x, t)\n
-    - neural_network : network architecture\n
-    - max_epochs : number of maximum epochs\n
-    - iters_num : maximum iterations\n
-    - batch_size : size of batch data\n
-    - optimizer : gradient descent optimizer\n
+    - dataset_train : train dataset (x, t)
+    - dataset_test : test dataset (x, t)
+    - neural_network : network architecture
+    - max_epochs : number of maximum epochs
+    - iters_num : maximum iterations
+    - batch_size : size of batch data
+    - optimizer : gradient descent optimizer
     """
     # Object initializer
     def __init__(self, dataset_train, dataset_test, neural_network,

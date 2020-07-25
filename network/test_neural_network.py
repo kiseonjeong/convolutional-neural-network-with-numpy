@@ -2,7 +2,6 @@ import numpy as np
 from dataset.mnist import load_mnist
 from function.activation import *
 
-# The test neural network with three layers
 class TestNet:
     """
     (class) TestNet

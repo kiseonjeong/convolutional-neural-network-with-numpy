@@ -8,7 +8,7 @@ class SGD:
 
     Parameter
     ---------
-    - lr : learning rate (default = 0.01)\n
+    - lr : learning rate (default = 0.01)
     """
     # Object initializer
     def __init__(self, lr=0.01):
@@ -27,8 +27,8 @@ class Momentum:
 
     Parameter
     ---------
-    - lr : learning rate (default = 0.01)\n
-    - momentum : momentum value (default = 0.9)\n
+    - lr : learning rate (default = 0.01)
+    - momentum : momentum value (default = 0.9)
     """
     # Object initializer
     def __init__(self, lr=0.01, momentum=0.9):
@@ -55,8 +55,8 @@ class Nesterov:
 
     Parameter
     ---------
-    - lr : learning rate (default = 0.01)\n
-    - momentum : momentum parameter (default = 0.9)\n
+    - lr : learning rate (default = 0.01)
+    - momentum : momentum parameter (default = 0.9)
     """
     # Object initializer
     def __init__(self, lr=0.01, momentum=0.9):
@@ -85,7 +85,7 @@ class AdaGrad:
 
     Parameter
     ---------
-    - lr : learning rate (default = 0.01)\n
+    - lr : learning rate (default = 0.01)
     """
     # Object initializer
     def __init__(self, lr=0.01):
@@ -111,8 +111,8 @@ class RMSprop:
 
     Parameter
     ---------
-    - lr : learning rate (default = 0.01)\n
-    - decay_rate : decay parameter (default = 0.99)\n
+    - lr : learning rate (default = 0.01)
+    - decay_rate : decay parameter (default = 0.99)
     """
     # Object initializer
     def __init__(self, lr=0.01, decay_rate = 0.99):
@@ -140,9 +140,9 @@ class Adam:
 
     Parameter
     ---------
-    - lr : learning rate (default = 0.001)\n
-    - beta1 : beta1 parameter (default = 0.9)\n
-    - beta2 : beta2 parameter (default = 0.999)\n
+    - lr : learning rate (default = 0.001)
+    - beta1 : beta1 parameter (default = 0.9)
+    - beta2 : beta2 parameter (default = 0.999)
     """
     # Object initializer
     def __init__(self, lr=0.001, beta1=0.9, beta2=0.999):

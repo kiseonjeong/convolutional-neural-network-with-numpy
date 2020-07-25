@@ -8,15 +8,15 @@ def im2col(input_data, filter_h, filter_w, stride, pad):
 
     Parameter
     ---------
-    - input_data : input data\n
-    - filter_h : filter height\n
-    - filter_w : filter width\n
-    - stride : sliding interval\n
-    - pad : boundary padding length\n
+    - input_data : input data
+    - filter_h : filter height
+    - filter_w : filter width
+    - stride : sliding interval
+    - pad : boundary padding length
 
     Return
     ------
-    - reshaped column data\n
+    - reshaped column data
     """
     # Calculate result resolution information
     N, C, H, W = input_data.shape
@@ -46,16 +46,16 @@ def col2im(col, input_shape, filter_h, filter_w, stride, pad):
     
     Parameter
     ---------
-    - col : column data\n
-    - input_shape : original shape on the input\n
-    - filter_h : filter height\n
-    - filter_w : filter width\n
-    - stride : sliding interval\n
-    - pad : boundary padding length\n
+    - col : column data
+    - input_shape : original shape on the input
+    - filter_h : filter height
+    - filter_w : filter width
+    - stride : sliding interval
+    - pad : boundary padding length
 
     Return
     ------
-    - reshaped image data\n
+    - reshaped image data
     """
     # Calculate result resolution information
     N, C, H, W = input_shape.shape

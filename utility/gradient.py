@@ -9,12 +9,12 @@ def numerical_diff(self, f, x):
     ------------------------
     Parameter
     ---------
-    - f : input function\n
-    - x : input value(s)\n
+    - f : input function
+    - x : input value(s)
 
     Return
     ------
-    - numerical difference value(s)\n
+    - numerical difference value(s)
     """
     # Calculate a numerical difference
     h = 1e-4
@@ -43,12 +43,12 @@ def numerical_gradient(self, f, x):
 
     Parameter
     ---------
-    - f : input function\n
-    - x : input value(s)\n
+    - f : input function
+    - x : input value(s)
 
     Return
     ------
-    - numerical gradient value(s)\n
+    - numerical gradient value(s)
     """
     # Calculate numerical gradients with batch
     if x.ndim == 1:
@@ -69,14 +69,14 @@ def gradient_descent(self, f, init_x, lr=0.01, step_num=100):
 
     Parameter
     ---------
-    - f : input function\n
-    - x : initial data\n
-    - lr : learning rate (default = 0.01)\n
-    - step_num : maximum of iterations (default = 100)\n
+    - f : input function
+    - x : initial data
+    - lr : learning rate (default = 0.01)
+    - step_num : maximum of iterations (default = 100)
 
     Return
     ------
-    - gradient descent result\n
+    - gradient descent result
     """
     # Optimize a function using the gradient descent
     x = init_x

@@ -11,10 +11,10 @@ class TwoLayerNet:
 
     Parameter
     ---------
-    - num_input_node : number of input node\n
-    - num_hidden_node_list : number of hidden node list\n
-    - num_output_node : number of output node\n
-    - weight_init_std : weight sigma value (default = he)\n
+    - num_input_node : number of input node
+    - num_hidden_node_list : number of hidden node list
+    - num_output_node : number of output node
+    - weight_init_std : weight sigma value (default = he)
      - he, xavier
     """
     # Object initializer

@@ -200,11 +200,11 @@ class BatchNorm:
 
     Parameter
     ---------
-    - gamma : scale parameter\n
-    - beta : shift parameter\n
-    - momentum : moving average parameter (default = 0.9)\n
-    - running_mean : moving average result of batch means (default = None)\n
-    - running_var : moving average result of batch variances (default = None)\n
+    - gamma : scale parameter
+    - beta : shift parameter
+    - momentum : moving average parameter (default = 0.9)
+    - running_mean : moving average result of batch means (default = None)
+    - running_var : moving average result of batch variances (default = None)
     """
     # Object initializer
     def __init__(self, gamma, beta, momentum=0.9, running_mean=None, running_var=None):
@@ -293,10 +293,10 @@ class Convolution:
 
     Parameter
     ---------
-    - W : kernel\n
-    - b : bias\n
-    - stride : sliding interval (default = 1)\n
-    - pad : data padding length (default = 0)\n
+    - W : kernel
+    - b : bias
+    - stride : sliding interval (default = 1)
+    - pad : data padding length (default = 0)
     """
     # Object initializer
     def __init__(self, W, b, stride=1, pad=0):
@@ -349,10 +349,10 @@ class Pooling:
 
     Parameter
     ---------
-    - pool_h : pooling height\n
-    - pool_w : pooling width\n
-    - stride : sliding interval (default = 1)\n
-    - pad : data padding length (default = 0)\n
+    - pool_h : pooling height
+    - pool_w : pooling width
+    - stride : sliding interval (default = 1)
+    - pad : data padding length (default = 0)
     """
     # Object initializer
     def __init__(self, pool_h, pool_w, stride=1, pad=0):

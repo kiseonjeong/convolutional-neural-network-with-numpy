@@ -8,12 +8,12 @@ def sum_of_squares_error(y, t):
 
     Parameter
     ---------
-    - y : output value(s)\n
-    - t : target value(s)\n
+    - y : output value(s)
+    - t : target value(s)
 
     Return
     ------
-    - error value between value(s)\n
+    - error value between value(s)
     """
     return 0.5 * np.sum((y - t) ** 2)
 
@@ -25,13 +25,13 @@ def cross_entropy_error(y, t, one_hot_enc=True):
 
     Parameter
     ---------
-    - y : output value(s)\n
-    - t : target value(s)\n
+    - y : output value(s)
+    - t : target value(s)
     one_hot_enc : one hot encoding flag (default = True)
 
     Return
     ------
-    - error value between value(s)\n
+    - error value between value(s)
     """
     if y.ndim == 1:
         t = t.reshape(1, t.size)
