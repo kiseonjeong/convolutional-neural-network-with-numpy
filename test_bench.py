@@ -34,7 +34,7 @@ use_batchnorm = False
 network = MultiLayerNet(num_input_node, hidden_architecture, num_output_node, activation_type, weight_init_std, \
                         weight_decay_lambda, use_dropout, dropout_ratio, use_batchnorm)
 optimizer = SGD(lr=learning_rate)
-trainer = NetTrainer(dataset_train, dataset_test, network, max_epochs, iters_num, batch_size, optimizer)
+trainer = NetTrainer(dataset_train, dataset_test, network, max_epochs, batch_size, optimizer='SGD', optimizer_param={'lr': 0.01})
 
 # Do training on the network
 trainer.train_network()

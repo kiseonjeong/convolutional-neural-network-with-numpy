@@ -6,6 +6,6 @@ from network.optimizer import *
 from network.multi_layer_network import *
 from network.trainer import *
 
-# Load the MNIST dataset
-(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
-
+d = {'sgd': SGD}
+print(SGD)
+print(SGD())
