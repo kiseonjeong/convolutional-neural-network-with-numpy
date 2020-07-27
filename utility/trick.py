@@ -58,7 +58,7 @@ def col2im(col, input_shape, filter_h, filter_w, stride, pad):
     - reshaped image data
     """
     # Calculate result resolution information
-    N, C, H, W = input_shape.shape
+    N, C, H, W = input_shape
     out_h = (H + 2 * pad - filter_h) // stride + 1
     out_w = (W + 2 * pad - filter_w) // stride + 1
     col = col.reshape(N, out_h, out_w, C, filter_h, filter_w).transpose(0, 3, 4, 5, 1, 2)

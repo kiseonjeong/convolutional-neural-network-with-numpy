@@ -25,7 +25,7 @@ class SimpleConvNet:
         filter_num = conv_param['filter_num']
         filter_size = conv_param['filter_size']
         filter_pad = conv_param['pad']
-        filter_stride = conv_param['filter_stride']
+        filter_stride = conv_param['stride']
         num_input_node = input_dim[1]
         conv_output_size = (num_input_node - filter_size + 2 * filter_pad) / filter_stride + 1
         pool_output_size = int(filter_num * (conv_output_size / 2) * (conv_output_size / 2))
@@ -34,7 +34,7 @@ class SimpleConvNet:
         self.params = {}
         self.params['W1'] = weight_init_std * np.random.randn(filter_num, input_dim[0], filter_size, filter_size)
         self.params['b1'] = np.zeros(filter_num)
-        self.params['W2'] = weight_init_std * np.random.randn(num_output_node, num_hidden_node)
+        self.params['W2'] = weight_init_std * np.random.randn(pool_output_size, num_hidden_node)
         self.params['b2'] = np.zeros(num_hidden_node)
         self.params['W3'] = weight_init_std * np.random.randn(num_hidden_node, num_output_node)
         self.params['b3'] = np.zeros(num_output_node)
@@ -58,13 +58,13 @@ class SimpleConvNet:
 
     # Calculate a loss value
     def loss(self, x, t):
-        y = self.predict(x, train_flag)
+        y = self.predict(x)
 
         return self.lastLayer.forward(y, t)
 
     # Calculate an accuracy
     def accuracy(self, x, t, batch_size=100):
-        if t.ndim != 1 :
+        if t.ndim != 1:
             t = np.argmax(t, axis=1)
         acc = 0.0
         for i in range(int(x.shape[0] / batch_size)):

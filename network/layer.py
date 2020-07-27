@@ -161,7 +161,12 @@ class SoftmaxWithLoss:
     # Do backward computations
     def backward(self, dout=1):
         batch_size = self.t.shape[0]
-        dx = (self.y - self.t) / batch_size
+        if self.t.size == self.y.size:
+            dx = (self.y - self.t) / batch_size
+        else:
+            dx = self.y.copy()
+            dx[np.arange(batch_size), self.t] -= 1
+            dx = dx / batch_size
 
         return dx
 
@@ -304,6 +309,11 @@ class Convolution:
         self.b = b
         self.stride = stride
         self.pad = pad
+        self.x = None
+        self.col = None
+        self.col_W = None
+        self.dW = None
+        self.db = None
 
     # Do forward computations
     def forward(self, x):
@@ -367,8 +377,8 @@ class Pooling:
     def forward(self, x):
         # Calculate output resolution information
         N, C, H, W = x.shape
-        out_h = 1 + int(1 + (H - self.pool_h) / self.stride)
-        out_w = 1 + int(1 + (W - self.pool_w) / self.stride)
+        out_h = int(1 + (H - self.pool_h) / self.stride)
+        out_w = int(1 + (W - self.pool_w) / self.stride)
         
         # Apply the im2col
         col = im2col(x, self.pool_h, self.pool_w, self.stride, self.pad)
