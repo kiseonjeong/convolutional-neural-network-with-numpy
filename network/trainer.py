@@ -79,6 +79,7 @@ class NetTrainer:
             eval_dataset_train = self.dataset_train
             eval_dataset_test = self.dataset_test
             if not self.eval_sample_num_per_epoch is None:
+                t = self.eval_sample_num_per_epoch
                 eval_dataset_train = Dataset(self.dataset_train.x[:t], self.dataset_train.t[:t])
                 eval_dataset_test = Dataset(self.dataset_test.x[:t], self.dataset_test.t[:t])
             self.train_loss = self.neural_network.loss(eval_dataset_train.x, eval_dataset_train.t)

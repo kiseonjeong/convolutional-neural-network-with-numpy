@@ -122,7 +122,7 @@ class SimpleConvNet:
         # Load parameters
         with open(file_name, 'rb') as f:
             params = pickle.load(f)
-        for key, val in params.item():
+        for key, val in params.items():
             self.params[key] = val
 
         for i, key in enumerate(['Conv1', 'Affine1', 'Affine2']):
